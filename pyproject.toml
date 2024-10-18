@@ -1,0 +1,19 @@
+[project]
+name = "etsai"
+version = "0.1.0"
+description = "A new project created with Copier"
+authors = [
+    {name = "jetxeberria", email = "etxeberria_92@hotmail.com"},
+]
+dependencies = [
+    "pytest>=3.2.5",
+    "copier>=9.3.1",
+]
+requires-python = "==3.12.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.pdm]
+python_requires = ">=3.12"
+distribution = false
+

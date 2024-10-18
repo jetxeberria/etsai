@@ -1,0 +1,11 @@
+# Python
+__pypackages__/
+.pdm-python/
+.pdm.lock
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDEs
+.vscode/
