@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Makefile file to host common environment targets
 
 PDM := pdm
@@ -9,10 +11,10 @@ setup-system:
 	@echo "System setup is complete."
 
 # Initialize the repository (run only once on the repository)
-init-repo: _init-git-repository setup-repo
+init-repo: init-git-repository setup-repo
 	@echo "Repository is initialized."
 
-_init-git-repository:
+init-git-repository:
 	@echo "Initizalizing the repository..."
 	git init
 
