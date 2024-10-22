@@ -1,24 +1,39 @@
 import pytest
 from typer.testing import CliRunner
 
-from etsai.main import app 
+from etsai.main import create_app 
 from etsai.plugin_loader import load_plugins
 
 runner = CliRunner()
 
-def test_system_status():
-    app_loaded = app()
-    result = runner.invoke(app_loaded, ["system", "status"])
+@pytest.fixture
+def app():
+    return create_app()
+
+
+def test_system_status(app):
+    result = runner.invoke(app, ["system", "status"])
     assert result.exit_code == 0
     assert "Checking system status..." in result.output
 
-def test_media_video_convert():
-    result = runner.invoke(app(), ["media", "video-convert"])
+def test_media_video_convert(app):
+    result = runner.invoke(app, ["media", "video-convert"])
     assert result.exit_code == 0
     assert "Converting video..." in result.output
 
-def test_media_image_generate():
-    result = runner.invoke(app(), ["media", "image-generate"])
+def test_media_video_trim_when_missing_args_then_error(app):
+    result = runner.invoke(app, ["media", "video-trim"])
+    assert result.exit_code != 0
+
+def test_media_video_trim(app, tmp_path):
+    output_file = tmp_path / "output.mp4"
+    result = runner.invoke(app, ["media", "video-trim", "-f", "tests/helpers/video.mp4", "--stop-time", "00:00:05", "-o", str(output_file)])
+    assert result.exit_code == 0
+    assert "Video trimmed successfully" in result.output
+    assert output_file.exists()
+
+def test_media_image_generate(app):
+    result = runner.invoke(app, ["media", "image-generate"])
     assert result.exit_code == 0
     assert "Generating image..." in result.output
 
