@@ -2,5 +2,5 @@
 
 .PHONY: specific-target
 
-specific-target:
-	@echo "This is a project-specific target."
+test:
+	pytest tests/
