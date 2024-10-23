@@ -7,6 +7,7 @@ import sys
 if len(sys.argv) == 1:
     sys.argv.append("--help")
 
+
 def create_category_app(commands: Dict[str, Callable]) -> typer.Typer:
     """
     Recursively creates a Typer application for a given category with its commands and subcategories.
@@ -34,8 +35,10 @@ def create_category_app(commands: Dict[str, Callable]) -> typer.Typer:
             category_app.add_typer(sub_category_app, name=command_name)
         else:
             # It's a command; add it to the current Typer app
-            help_message = getattr(command_func, 'help_message', f"Command '{command_name}'")
-            category_app.command(name=command_name, help=help_message)(command_func)
+            help_message = getattr(
+                command_func, 'help_message', f"Command '{command_name}'")
+            category_app.command(
+                name=command_name, help=help_message)(command_func)
 
     return category_app
 

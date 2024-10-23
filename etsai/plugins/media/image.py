@@ -2,13 +2,16 @@
 
 from typing import Dict, Callable
 
+
 def generate() -> None:
     """
     Generate image.
     """
     print("Generating image...")
 
+
 generate.help_message = "Displays the current system status (CPU, RAM, etc.)."
+
 
 def register() -> Dict[str, Callable]:
     """
