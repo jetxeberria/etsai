@@ -3,6 +3,7 @@ from typer.testing import CliRunner
 
 from etsai.main import create_app 
 from etsai.plugin_loader import load_plugins
+import cv2
 
 runner = CliRunner()
 
@@ -10,6 +11,15 @@ runner = CliRunner()
 def app():
     return create_app()
 
+def assert_video_duration(filename, expected_duration):
+    # Verify the output file is a video and has a duration of 5 seconds
+    cap = cv2.VideoCapture(str(filename))
+    assert cap.isOpened()
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    duration = frame_count / fps
+    assert abs(duration - expected_duration) < 0.1  # Allowing a small margin for floating point precision
+    cap.release()
 
 def test_system_status(app):
     result = runner.invoke(app, ["system", "status"])
@@ -31,6 +41,8 @@ def test_media_video_trim(app, tmp_path):
     assert result.exit_code == 0
     assert "Video trimmed successfully" in result.output
     assert output_file.exists()
+    assert_video_duration(output_file, 5)
+
 
 def test_media_image_generate(app):
     result = runner.invoke(app, ["media", "image-generate"])
