@@ -70,11 +70,10 @@ add-package: _check-env-ok
 	@package_name=$${package_name}; \
 	if [ -z "$$package_name" ]; then \
 		if [ -z "$1"]; then \
-
-		read -p "Enter package name to add: " package_name; \
+			read -p "Enter package name to add: " package_name; \
 		else \
 			package_name=$1; \
-			fi; \
+		fi; \
 	fi; \
 	$(PDM) add $$package_name
 	@echo "Package $$package_name added."
