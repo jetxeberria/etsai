@@ -16,23 +16,6 @@ def convert() -> None:
 convert.help_message = "Convert video."
 
 
-def validate_time_format(time_str: str) -> bool:
-    """
-    Validate the time format (HH:MM:SS).
-
-    Args:
-        time_str (str): The time string to validate.
-
-    Returns:
-        bool: True if valid, False otherwise.
-    """
-    try:
-        datetime.strptime(time_str, "%H:%M:%S")
-        return True
-    except ValueError:
-        return False
-
-
 def trim(
     file: str = typer.Option(..., "-f", "--file", help="Input video file"),
     start_time: str = typer.Option(
@@ -49,10 +32,10 @@ def trim(
         raise typer.BadParameter(
             "At least one of --start-time or --stop-time must be provided.")
 
-    if start_time and not validate_time_format(start_time):
+    if start_time and not _validate_time_format(start_time):
         raise typer.BadParameter("Invalid start-time format. Use HH:MM:SS.")
 
-    if stop_time and not validate_time_format(stop_time):
+    if stop_time and not _validate_time_format(stop_time):
         raise typer.BadParameter("Invalid stop-time format. Use HH:MM:SS.")
 
     if not output:
@@ -68,6 +51,23 @@ def trim(
 
     run_command(command)
     typer.echo(f"Video trimmed successfully, saved as: {output}")
+
+
+def _validate_time_format(time_str: str) -> bool:
+    """
+    Validate the time format (HH:MM:SS).
+
+    Args:
+        time_str (str): The time string to validate.
+
+    Returns:
+        bool: True if valid, False otherwise.
+    """
+    try:
+        datetime.strptime(time_str, "%H:%M:%S")
+        return True
+    except ValueError:
+        return False
 
 
 def register() -> Dict[str, Callable]:

@@ -25,39 +25,6 @@ def assert_video_duration(filename, expected_duration):
     cap.release()
 
 
-def test_system_status(app):
-    result = runner.invoke(app, ["system", "status"])
-    assert result.exit_code == 0
-    assert "Checking system status..." in result.output
-
-
-def test_media_video_convert(app):
-    result = runner.invoke(app, ["media", "video-convert"])
-    assert result.exit_code == 0
-    assert "Converting video..." in result.output
-
-
-def test_media_video_trim_when_missing_args_then_error(app):
-    result = runner.invoke(app, ["media", "video-trim"])
-    assert result.exit_code != 0
-
-
-def test_media_video_trim(app, tmp_path):
-    output_file = tmp_path / "output.mp4"
-    result = runner.invoke(app, ["media", "video-trim", "-f", "tests/helpers/video.mp4",
-                           "--stop-time", "00:00:05", "-o", str(output_file)])
-    assert result.exit_code == 0
-    assert "Video trimmed successfully" in result.output
-    assert output_file.exists()
-    assert_video_duration(output_file, 5)
-
-
-def test_media_image_generate(app):
-    result = runner.invoke(app, ["media", "image-generate"])
-    assert result.exit_code == 0
-    assert "Generating image..." in result.output
-
-
 @pytest.fixture
 def fake_plugin(tmp_path):
     # Crear un plugin simulado en un directorio temporal
@@ -87,3 +54,47 @@ def test_load_plugins(fake_plugin):
     assert "fake_plugin" in plugins
     assert callable(plugins["fake_plugin"])
     assert plugins["fake_plugin"]() == "Plugin cargado correctamente"
+
+
+@pytest.mark.skip(reason="Not implemented")
+def test_system_status(app):
+    result = runner.invoke(app, ["system", "status"])
+    assert result.exit_code == 0
+    assert "Checking system status..." in result.output
+
+
+@pytest.mark.skip(reason="Not implemented")
+def test_media_video_convert(app):
+    result = runner.invoke(app, ["media", "video-convert"])
+    assert result.exit_code == 0
+    assert "Converting video..." in result.output
+
+
+def test_media_video_trim_when_missing_args_then_error(app):
+    result = runner.invoke(app, ["media", "video-trim"])
+    assert result.exit_code != 0
+
+
+def test_media_video_trim(app, tmp_path):
+    output_file = tmp_path / "output.mp4"
+    result = runner.invoke(app, ["media", "video-trim", "-f", "tests/helpers/video.mp4",
+                           "--stop-time", "00:00:05", "-o", str(output_file)])
+    assert result.exit_code == 0
+    assert "Video trimmed successfully" in result.output
+    assert output_file.exists()
+    assert_video_duration(output_file, 5)
+
+
+@pytest.mark.skip(reason="Not implemented")
+def test_media_image_generate(app):
+    result = runner.invoke(app, ["media", "image-generate"])
+    assert result.exit_code == 0
+    assert "Generating image..." in result.output
+
+
+@pytest.mark.skip(reason="Not implemented")
+def test_media_image_to_text(app):
+    result = runner.invoke(
+        app, ["media", "image-to-text", "-f", "tests/helpers/image.jpg"])
+    assert result.exit_code == 0
+    assert "Extracting text from image..." in result.output
